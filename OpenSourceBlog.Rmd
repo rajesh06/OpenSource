@@ -1,0 +1,55 @@
+---
+title: "Open Source Software and Documentation and Disclosure Requirements"
+author: "Rajesh Saharabuddhe"
+date: "March 21, 2015"
+output: html_document
+---
+
+R documentation standards are designed around principles of reproducible research. That is, they are intended to allow another user to reproduce - and more importantly test - the results of of the original researcher.
+
+Actuarial Standard of Practice No. 41, _Actuarial Communications_ states that "In the actuarial report, the actuary should state the actuarial findings, and identify the methods, procedures, assumptions, and data used by the actuary with sufficient clarity that another actuary qualified in the same practice area could make an objective appraisal of the reasonableness of the actuary’s work as presented in the actuarial report." Say what you will about Excel, we must acknowledge that it is excellent at producing exhibits. That, in a sense, is why it has been the preferred tool for the production of actuarial reports. 
+
+Let us for the momment leave aside other required documentation (such as the responsible actuary, scope of assignment, etc.) and actuarial issues (such as the consideration of additional methods, exposures, etc.). What if this were the "exhibits and technical narrative" of my actuarial report:
+
+```{r echo=FALSE, warning=FALSE}
+suppressPackageStartupMessages(library(ChainLadder))
+suppressPackageStartupMessages(library(scales))
+```
+
+# Exhibit 1: Paid Data
+```{r}
+auto$PersonalAutoPaid
+```
+# Exhibit 2: Incurred Data
+```{r}
+auto$PersonalAutoIncurred
+```
+# Exhibit 3: Estimated Ultimate Claims: Munich Chain Ladder
+```{r}
+a <- MunichChainLadder(auto$PersonalAutoPaid, auto$PersonalAutoIncurred)
+summary(a)
+```
+# Exhibit 4: Indicated Unpaid Claims
+### Paid Munich Chain Lader
+```{r echo=FALSE}
+paste0("Estimated Ultimate Claims = ", comma_format(digits = 0)(summary(a)$Totals[2,1]))
+paste0("Paid Claims = ", comma_format(digits = 0)(summary(a)$Totals[1,1]))
+paste0("Estimated Unpaid Claims = ", comma_format(digits = 0)(summary(a)$Totals[2,1] - summary(a)$Totals[1,1]))
+```
+### Incurred Munich Chain Lader
+```{r echo=FALSE}
+paste0("Estimated Ultimate Claims = ", comma_format(digits = 0)(summary(a)$Totals[2,2]))
+paste0("Paid Claims = ", comma_format(digits = 0)(summary(a)$Totals[1,1]))
+paste0("Estimated Unpaid Claims = ", comma_format(digits = 0)(summary(a)$Totals[2,2] - summary(a)$Totals[1,1]))
+```
+### Selected Unpaid Claims Estimate
+```{r echo=FALSE}
+paste0("Estimated Unpaid Claims = ", comma_format(digits = 0)(mean(summary(a)$Totals[2,2] - summary(a)$Totals[1,1],
+                                                                   summary(a)$Totals[2,1] - summary(a)$Totals[1,1])))
+```
+# Citations
+```{r echo = FALSE}
+citation()[[1]]$textVersion
+citation("ChainLadder")[[1]]$textVersion
+citation("scales")[[1]]$textVersion
+```
