@@ -1,55 +1,96 @@
 ---
-title: "Open Source Software and Documentation and Disclosure Requirements"
+title: "R and Actuarial Documentation and Disclosure Requirements"
 author: "Rajesh Saharabuddhe"
-date: "March 21, 2015"
 output: html_document
 ---
 
-R documentation standards are designed around principles of reproducible research. That is, they are intended to allow another user to reproduce - and more importantly test - the results of of the original researcher.
 
-Actuarial Standard of Practice No. 41, _Actuarial Communications_ states that "In the actuarial report, the actuary should state the actuarial findings, and identify the methods, procedures, assumptions, and data used by the actuary with sufficient clarity that another actuary qualified in the same practice area could make an objective appraisal of the reasonableness of the actuary’s work as presented in the actuarial report." Say what you will about Excel, we must acknowledge that it is excellent at producing exhibits. That, in a sense, is why it has been the preferred tool for the production of actuarial reports. 
+Actuarial Standard of Practice No. 41, _Actuarial Communications_ states that "In the actuarial report, the actuary should state the actuarial findings, and identify the methods, procedures, assumptions, and data used by the actuary with sufficient clarity that another actuary qualified in the same practice area could make an objective appraisal of the reasonableness of the actuary's work as presented in the actuarial report." 
 
-Let us for the momment leave aside other required documentation (such as the responsible actuary, scope of assignment, etc.) and actuarial issues (such as the consideration of additional methods, exposures, etc.). What if this were the "exhibits and technical narrative" of my actuarial report:
+Say what you will about Excel, we must acknowledge that it is excellent at producing exhibits and it is "universally known / understood." That, in a sense, is why it has been the preferred tool for the production of actuarial reports that comply with _ASOP 41_.
 
-```{r echo=FALSE, warning=FALSE}
-suppressPackageStartupMessages(library(ChainLadder))
-suppressPackageStartupMessages(library(scales))
+R and associated tools (Sweave, knitr, etc) were designed around principles of reproducible research. That is, they are intended to allow another user to reproduce - and more importantly test - the results of the original researcher. That should naturally allow for a report produced in R to comply with _ASOP 41_ - but does it?
+
+## An Actuarial Report via R
+Let us, for the momment, leave aside other required documentation (such as the responsible actuary, scope of assignment, etc.) and actuarial issues (such as the consideration of additional methods, exposures, etc.). What if this were the "exhibits and technical narrative" of my actuarial report:
+
+***
+#My Actuarial Report
+
+## Introduction
+I prepared this analysis using R. I first loaded the packages I needed as follows:
+```{r}
+library(ChainLadder)
+library(scales)
 ```
 
-# Exhibit 1: Paid Data
+## Exhibit 1: Paid Data
+This is my paid claims data triangle:
 ```{r}
 auto$PersonalAutoPaid
 ```
-# Exhibit 2: Incurred Data
+## Exhibit 2: Incurred Data
+This is my incurred claims data triangle:
 ```{r}
 auto$PersonalAutoIncurred
 ```
-# Exhibit 3: Estimated Ultimate Claims: Munich Chain Ladder
+## Exhibit 3: Estimated Ultimate Claims: Munich Chain Ladder
+I decided to use the Munich Chain Ladder method. I implemented that method like this:
 ```{r}
 a <- MunichChainLadder(auto$PersonalAutoPaid, auto$PersonalAutoIncurred)
+```
+and my results were this:
+```{r}
+
 summary(a)
 ```
-# Exhibit 4: Indicated Unpaid Claims
+## Exhibit 4: Indicated Unpaid Claims
+That resulted in the following estimates of unpaid claims:
+
 ### Paid Munich Chain Lader
-```{r echo=FALSE}
+```{r}
 paste0("Estimated Ultimate Claims = ", comma_format(digits = 0)(summary(a)$Totals[2,1]))
 paste0("Paid Claims = ", comma_format(digits = 0)(summary(a)$Totals[1,1]))
 paste0("Estimated Unpaid Claims = ", comma_format(digits = 0)(summary(a)$Totals[2,1] - summary(a)$Totals[1,1]))
 ```
 ### Incurred Munich Chain Lader
-```{r echo=FALSE}
+```{r}
 paste0("Estimated Ultimate Claims = ", comma_format(digits = 0)(summary(a)$Totals[2,2]))
 paste0("Paid Claims = ", comma_format(digits = 0)(summary(a)$Totals[1,1]))
 paste0("Estimated Unpaid Claims = ", comma_format(digits = 0)(summary(a)$Totals[2,2] - summary(a)$Totals[1,1]))
 ```
 ### Selected Unpaid Claims Estimate
-```{r echo=FALSE}
+I selected this estimate:
+```{r}
+
 paste0("Estimated Unpaid Claims = ", comma_format(digits = 0)(mean(summary(a)$Totals[2,2] - summary(a)$Totals[1,1],
                                                                    summary(a)$Totals[2,1] - summary(a)$Totals[1,1])))
 ```
-# Citations
-```{r echo = FALSE}
+## Citations
+
+These are the tools I used.
+
+```{r}
 citation()[[1]]$textVersion
 citation("ChainLadder")[[1]]$textVersion
 citation("scales")[[1]]$textVersion
 ```
+
+***
+
+# Compliance with ASOP 41
+Do you think I complied with ASOP 41? I submit that my report:
+
+* state(s) the actuarial findings
+
+* identif(ies) the methods, procedures, assumptions, and data used by the me
+
+However: 
+
+* Does it do so _with sufficient clarity that another actuary qualified in the same practice area could make an objective appraisal of the reasonableness of the actuary's work as presented in the actuarial report._?
+
+* Does it matter that I have documented the report in an HTML file?
+
+* Do I really need to __echo__ the R code?
+
+I would be interested in your thoughts.
