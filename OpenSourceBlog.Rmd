@@ -9,10 +9,16 @@ Actuarial Standard of Practice No. 41, _Actuarial Communications_ states that "I
 
 Say what you will about Excel, we must acknowledge that it is excellent at producing exhibits and it is "universally known / understood." That, in a sense, is why it has been the preferred tool for the production of actuarial reports that comply with _ASOP 41_.
 
-R and associated tools (Sweave, knitr, etc) were designed around principles of reproducible research. That is, they are intended to allow another user to reproduce - and more importantly test - the results of the original researcher. That should naturally allow for a report produced in R to comply with _ASOP 41_ - but does it?
+R and associated tools (Sweave, knitr, etc) were designed around principles of *reproducible research*. If you are not familiar with this concept, it is discussed on [CRAN](http://cran.r-project.org/web/views/ReproducibleResearch.html) as follows:
+
+> The goal of reproducible research is to tie specific instructions to data analysis and experimental data so that scholarship can be recreated, better understood and verified.
+>
+> R largely facilitates reproducible research using literate programming; a document that is a combination of content and data analysis code. The Sweave function (in the base R utils package) and the knitr package can be used to blend the subject matter and R code so that a single document defines the content and the algorithms. 
+
+That is, they are intended to allow another user to reproduce - and more importantly test - the results of the original researcher. That should naturally allow for a report produced in R to comply with _ASOP 41_ - but does it?
 
 ## An Actuarial Report via R
-Let us, for the momment, leave aside other required documentation (such as the responsible actuary, scope of assignment, etc.) and actuarial issues (such as the consideration of additional methods, exposures, etc.). What if this were the "exhibits and technical narrative" of my actuarial report:
+Let us, for the moment, leave aside other required documentation (such as the responsible actuary, scope of assignment, etc.) and actuarial issues (such as the consideration of additional methods, exposures, etc.). What if this were the "exhibits and technical narrative" of my actuarial report:
 
 ***
 #My Actuarial Report
@@ -91,6 +97,6 @@ However:
 
 * Does it matter that I have documented the report in an HTML file?
 
-* Do I really need to __echo__ the R code?
+* Do I really need to __echo__ the R code? Or is that my intellectual property (much as we might consider the formulas in an excel workbook)?
 
 I would be interested in your thoughts.
